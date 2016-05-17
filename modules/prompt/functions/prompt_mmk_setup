@@ -1,0 +1,96 @@
+#
+# A simple theme that displays:
+#   - Python virtual environment.
+#   - Git branch.
+#   - Git state.
+#   - Last command exit state (smiley/X).
+#   - ♯ or ♮ depeding on privileges
+#
+# Authors:
+#   Michał Knapik <michal.knapik@gmail.com>
+#
+# Screenshots:
+#   http://i.imgur.com/ijycV6n.png
+#
+
+# Load dependencies.
+pmodload 'helper'
+
+function prompt_mmk_hostname {
+  if [ -n "$SSH_CLIENT" ]; then
+    _prompt_mmk_hostname="%F{magenta}%m%f:"
+  else
+    _prompt_mmk_hostname=""
+  fi
+}
+
+function prompt_mmk_pwd {
+  local pwd="${PWD/#$HOME/~}"
+
+# %B%c%b
+  if [[ "$pwd" == (#m)[/~] ]]; then
+    _prompt_mmk_pwd="$MATCH"
+    unset MATCH
+  else
+    _prompt_mmk_pwd="${${${(@j:/:M)${(@s:/:)pwd}##.#?}:h}%/}/${pwd:t}"
+  fi
+}
+
+function prompt_mmk_precmd {
+  unsetopt XTRACE KSH_ARRAYS
+
+  # Get Git repository information.
+  if (( $+functions[git-info] )); then
+    git-info
+  fi
+
+  if (( $+functions[python-info] )); then
+    python-info
+  fi
+
+  if (( $+functions[ruby-info] )); then
+    ruby-info
+  fi
+
+  if (( $+functions[node-info] )); then
+    node-info
+  fi
+  # Format PWD.
+  prompt_mmk_pwd
+
+  prompt_mmk_hostname
+}
+
+function prompt_mmk_setup {
+  unsetopt XTRACE KSH_ARRAYS
+  prompt_opts=(percent subst)
+
+  # Add hook for calling git-info before each command.
+  add-zsh-hook precmd prompt_mmk_precmd
+
+  # Set editor-info parameters.
+  zstyle ':prezto:module:editor:info:completing' format '%B%F{red}...%f%b'
+
+  # Set python-info parameters.
+  zstyle ':prezto:module:python:info:virtualenv' format '%F{yellow}[%v]%f '
+
+  # Set ruby-info parameters.
+  zstyle ':prezto:module:ruby:info:version' format '%F{red}[%v]%f'
+  zstyle ':prezto:module:ruby:info:rvm' format 'v g'
+  # %v - Node.js version.
+  zstyle ':prezto:module:node:info:version' format ' %F{blue}[%v]%F{reset}'
+
+  # Set git-info parameters.
+  zstyle ':prezto:module:git:info' verbose 'yes'
+  zstyle ':prezto:module:git:info:branch' format '%F{blue}%b%f'
+  zstyle ':prezto:module:git:info:dirty' format '%%B%F{red}±%f%%b'
+  zstyle ':prezto:module:git:info:keys' format 'prompt' '%b%D '
+
+  # Define prompts.
+
+  PROMPT='${git_info[prompt]}${_prompt_mmk_hostname}%F{cyan}${_prompt_mmk_pwd}%f %(?:%F{green}%(!.♯.♮)%f:%F{red}✖%f) '
+  RPROMPT='${editor_info[overwrite]}${VIM:+" %B%F{green}V%f%b"}$python_info[virtualenv]$ruby_info[version]$node_info[version]'
+  SPROMPT='zsh: correct %F{red}%R%f to %F{green}%r%f [nyae]? '
+}
+
+prompt_mmk_setup "$@"

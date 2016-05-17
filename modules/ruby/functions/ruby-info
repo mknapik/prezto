@@ -15,7 +15,8 @@ unset ruby_info
 typeset -gA ruby_info
 
 if (( $+commands[rvm-prompt] )); then
-  version="$(rvm-prompt)"
+  zstyle -s ':prezto:module:ruby:info:rvm' format 'format'
+  version="$(eval rvm-prompt $format)"
 elif (( $+commands[rbenv] )); then
   version="$(rbenv version-name)"
 elif (( $+commands[ruby] )); then
