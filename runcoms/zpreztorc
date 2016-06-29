@@ -39,13 +39,14 @@ zstyle ':prezto:load' pmodule \
   'prompt' \
   \
   'git' \
-  'node' \
   'python' \
+  'wakeonlan' \
   'tmux' \
   \
   'syntax-highlighting' \
   'history-substring-search' \
   'autosuggestions' \
+  'node' \
   'ruby'
 
 # zstyle ':prezto:load' pmodule \
@@ -100,7 +101,7 @@ zstyle ':prezto:module:git:status:ignore' submodules 'all'
 #
 # Node
 #
-# 
+#
 # zstyle ':prezto:module:node:info:version' format 'version:%v'
 
 #
@@ -169,7 +170,7 @@ zstyle ':prezto:module:syntax-highlighting' highlighters \
 #
 
 # Auto set the tab and window titles.
-# zstyle ':prezto:module:terminal' auto-title 'yes'
+zstyle ':prezto:module:terminal' auto-title 'yes'
 
 # Set the window title format.
 # zstyle ':prezto:module:terminal:window-title' format '%n@%m: %s'
@@ -188,5 +189,5 @@ zstyle ':prezto:module:syntax-highlighting' highlighters \
 # zstyle ':prezto:module:tmux:auto-start' remote 'yes'
 
 # Integrate with iTerm2.
-# zstyle ':prezto:module:tmux:iterm' integrate 'yes'
+zstyle ':prezto:module:tmux:iterm' integrate 'yes'
 

@@ -11,6 +11,51 @@ if [[ "$SHLVL" -eq 1 && ! -o LOGIN && -s "${ZDOTDIR:-$HOME}/.zprofile" ]]; then
 fi
 
 path+=($HOME/bin)
+export AIRFLOW_HOME=~/.airflow
+export AIRFLOW__CORE__SQL_ALCHEMY_CONN='postgresql://airflow@localhost:5432/airflow'
+export AIRFLOW__CORE__EXECUTOR=CeleryExecutor
+export AIRFLOW__CELERY__BROKER_URL='redis://localhost:6379/0'
+export AIRFLOW__CELERY__CELERY_RESULT_BACKEND='db+postgres://airflow@localhost:5432/airflow'
+export AIRFLOW__CELERY__WORKER_LOG_SERVER_PORT=3334
 
 # more colors in autosuggestion
 export TERM="xterm-256color"
+
+# Make vim the default editor
+export EDITOR="subl -w"
+
+# Larger bash history (allow 32³ entries; default is 500)
+export HISTSIZE=32768
+export HISTFILESIZE=$HISTSIZE
+export HISTCONTROL=ignoredups
+# Make some commands not show up in history
+export HISTIGNORE="ls:cd:cd -:pwd:exit:date:* --help"
+
+# Prefer US English and use UTF-8
+export LANG="en_US"
+export LC_ALL="en_US.UTF-8"
+
+# Highlight section titles in manual pages
+export LESS_TERMCAP_md="$ORANGE"
+
+# Don’t clear the screen after quitting a manual page
+export MANPAGER="less -X"
+
+# Always enable colored `grep` output
+export GREP_OPTIONS="--color=auto"
+
+# Link Homebrew casks in `/Applications` rather than `~/Applications`
+export HOMEBREW_CASK_OPTS="--appdir=/Applications"
+
+export JAVA_HOME=`/usr/libexec/java_home`
+export GLASSFISH_HOME="$HOME/glassfish3"
+
+export JREBEL_PATH=$HOME/programs/jrebel/jrebel.jar
+export ASPECTJ_WEAVER_HOME=$HOME/.ivy2/cache/org.aspectj/aspectjweaver/jars
+export ASPECTJ_WEAVER_JAR=$ASPECTJ_WEAVER_HOME/aspectjweaver-1.8.2.jar
+export JAVA_OPTS=-Djava.library.path=/usr/local/lib
+export ACTIVATOR_HOME=$HOME/programs/activator
+
+export GOPATH=$HOME/.gopath
+export CHEF_USER=mknapik
+path+=($GOPATH/bin)
